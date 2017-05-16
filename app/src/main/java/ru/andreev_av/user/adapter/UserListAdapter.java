@@ -42,7 +42,10 @@ public class UserListAdapter extends RecyclerView.Adapter<UserViewHolder> {
                     .placeholder(R.mipmap.ic_launcher)
                     .error(R.mipmap.ic_launcher)
                     .into(holder.imgAvatar);
+        } else {
+            holder.imgAvatar.setImageResource(R.mipmap.ic_launcher);
         }
+
         holder.tvEmail.setText(user.getEmail());
         holder.tvName.setText(user.getFirstName() + " " + user.getLastName());
     }
