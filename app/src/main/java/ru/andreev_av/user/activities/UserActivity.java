@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 import ru.andreev_av.user.R;
 import ru.andreev_av.user.adapter.UserListAdapter;
 import ru.andreev_av.user.model.UserModel;
+import ru.andreev_av.user.net.ConnectionDetector;
 import ru.andreev_av.user.net.IUserHttpRequest;
 import ru.andreev_av.user.net.UserHttpRequestRetrofit;
 
@@ -29,6 +31,8 @@ public class UserActivity extends AppCompatActivity implements UserHttpRequestRe
     private RecyclerView rvUserList;
 
     private IUserHttpRequest userHttpRequest;
+
+    private ConnectionDetector connectionDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +51,13 @@ public class UserActivity extends AppCompatActivity implements UserHttpRequestRe
 
         userHttpRequest = new UserHttpRequestRetrofit(this);
 
-        userHttpRequest.getUserList();
+        connectionDetector = new ConnectionDetector(this);
+
+        if (connectionDetector.isNetworkAvailableAndConnected())
+            userHttpRequest.getUserList();
+        else
+            Toast.makeText(this, R.string.connection_not_found, Toast.LENGTH_SHORT).show();
+
     }
 
     private void findComponents() {

@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">User</string>
     <string name="action_settings">Settings</string>
+
+    <!-- Toast messages -->
+    <string name="connection_not_found">Check your internet connection</string>
 </resources>
