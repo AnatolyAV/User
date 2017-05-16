@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -24,6 +25,8 @@ import ru.andreev_av.user.net.UserHttpRequestRetrofit;
 public class UserActivity extends AppCompatActivity implements UserHttpRequestRetrofit.OnActionUserHttpRequestListener {
 
     private Toolbar toolbar;
+    private MenuItem updateItem;
+    private ProgressBar progressUpdate;
     private FloatingActionButton fabAddUser;
 
     private UserListAdapter adapter;
@@ -62,6 +65,7 @@ public class UserActivity extends AppCompatActivity implements UserHttpRequestRe
 
     private void findComponents() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        progressUpdate = (ProgressBar) findViewById(R.id.toolbar_progress_bar);
         fabAddUser = (FloatingActionButton) findViewById(R.id.fab_add_user);
         rvUserList = (RecyclerView) findViewById(R.id.rv_user_list);
     }
@@ -92,22 +96,40 @@ public class UserActivity extends AppCompatActivity implements UserHttpRequestRe
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_user, menu);
+        updateItem = menu.findItem(R.id.action_refresh);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_settings:
+                return true;
+            case R.id.action_refresh:
+                if (connectionDetector.isNetworkAvailableAndConnected()) {
+                    userHttpRequest.getUserList();
+                    setUpdateButtonState(true);
+                } else {
+                    Toast.makeText(this, R.string.connection_not_found, Toast.LENGTH_SHORT).show();
+                    setUpdateButtonState(false);
+                }
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void setUpdateButtonState(boolean isUpdate) {
+        if (isUpdate) {
+            updateItem.setVisible(false);
+            progressUpdate.setVisibility(View.VISIBLE);
+        } else {
+            progressUpdate.setVisibility(View.GONE);
+            updateItem.setVisible(true);
+        }
     }
 
     @Override
@@ -117,6 +139,7 @@ public class UserActivity extends AppCompatActivity implements UserHttpRequestRe
             adapter.refreshList(userList);
             adapter.notifyDataSetChanged();
         }
+        setUpdateButtonState(false);
     }
 
     @Override

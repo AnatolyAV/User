@@ -4,4 +4,7 @@
 
     <!-- Toast messages -->
     <string name="connection_not_found">Check your internet connection</string>
+
+    <!-- Toolbar menu -->
+    <string name="action_refresh">Refresh</string>
 </resources>
