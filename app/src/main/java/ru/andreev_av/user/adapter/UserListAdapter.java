@@ -38,6 +38,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserViewHolder> {
         if (avatarUrl != null && !avatarUrl.isEmpty() && avatarUrl.length() > 0) {
             Picasso.with(context)
                     .load(avatarUrl)
+                    .fit()
                     .noFade()
                     .placeholder(R.mipmap.ic_launcher)
                     .error(R.mipmap.ic_launcher)
