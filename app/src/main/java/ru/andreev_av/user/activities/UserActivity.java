@@ -3,17 +3,32 @@ package ru.andreev_av.user.activities;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import ru.andreev_av.user.R;
+import java.util.ArrayList;
+import java.util.List;
 
-public class UserActivity extends AppCompatActivity {
+import ru.andreev_av.user.R;
+import ru.andreev_av.user.adapter.UserListAdapter;
+import ru.andreev_av.user.model.UserModel;
+import ru.andreev_av.user.net.IUserHttpRequest;
+import ru.andreev_av.user.net.UserHttpRequestRetrofit;
+
+public class UserActivity extends AppCompatActivity implements UserHttpRequestRetrofit.OnActionUserHttpRequestListener {
 
     private Toolbar toolbar;
     private FloatingActionButton fabAddUser;
+
+    private UserListAdapter adapter;
+    private List<UserModel> userList = new ArrayList<>();
+    private RecyclerView rvUserList;
+
+    private IUserHttpRequest userHttpRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,11 +40,20 @@ public class UserActivity extends AppCompatActivity {
         initToolbar();
 
         initListeners();
+
+        initAdapter();
+
+        initComponents();
+
+        userHttpRequest = new UserHttpRequestRetrofit(this);
+
+        userHttpRequest.getUserList();
     }
 
     private void findComponents() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         fabAddUser = (FloatingActionButton) findViewById(R.id.fab_add_user);
+        rvUserList = (RecyclerView) findViewById(R.id.rv_user_list);
     }
 
     private void initListeners() {
@@ -42,6 +66,16 @@ public class UserActivity extends AppCompatActivity {
 
     protected void initToolbar() {
         setSupportActionBar(toolbar);
+    }
+
+    private void initAdapter() {
+        adapter = new UserListAdapter(this, userList);
+    }
+
+    private void initComponents() {
+        rvUserList.setAdapter(adapter);
+        rvUserList.setHasFixedSize(true);
+        rvUserList.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
@@ -64,5 +98,26 @@ public class UserActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onGetUserList(List<UserModel> userList) {
+        if (!userList.isEmpty()) {
+            this.userList = userList;
+            adapter.refreshList(userList);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onAddUser(UserModel user) {
+    }
+
+    @Override
+    public void onUpdateUser(UserModel user) {
+    }
+
+    @Override
+    public void onError(String errorMessage) {
     }
 }
