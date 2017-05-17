@@ -1,10 +1,13 @@
 
 package ru.andreev_av.user.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class UserModel {
+public class UserModel implements Parcelable {
 
     @SerializedName("id")
     @Expose
@@ -21,6 +24,10 @@ public class UserModel {
     @SerializedName("avatar_url")
     @Expose
     private String avatarUrl;
+
+    public UserModel(Parcel in) {
+        readFromParcel(in);
+    }
 
     public Integer getId() {
         return id;
@@ -60,6 +67,42 @@ public class UserModel {
 
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        @Override
+        public UserModel createFromParcel(Parcel in) {
+            return new UserModel(in);
+        }
+
+        @Override
+        public Object[] newArray(int size) {
+            return new UserModel[size];
+        }
+    };
+
+    private void readFromParcel(Parcel in) {
+        id = in.readInt();
+        firstName = in.readString();
+        lastName = in.readString();
+        email = in.readString();
+        avatarUrl = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(firstName);
+        dest.writeString(lastName);
+        dest.writeString(email);
+        if (avatarUrl != null)
+            dest.writeString(avatarUrl);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     @Override

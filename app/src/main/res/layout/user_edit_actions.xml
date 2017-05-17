@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.AppBarLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tlb_edit_actions"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/img_user_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:padding="10dp"
+                android:contentDescription="@string/close"
+                android:src="@drawable/ic_arrow_back"
+                />
+
+            <TextView
+                android:id="@+id/tv_action_type_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="@color/colorWhite"
+                android:text="@string/title_edit"
+                android:textAppearance="@android:style/TextAppearance.Material.Title"
+                tools:targetApi="lollipop" />
+
+            <ImageView
+                android:id="@+id/img_user_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:padding="10dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginRight="15dp"
+                android:contentDescription="@string/save"
+                android:src="@android:drawable/ic_menu_save"
+
+                />
+
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+</android.support.design.widget.AppBarLayout>

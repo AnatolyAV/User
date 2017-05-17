@@ -4,7 +4,22 @@
 
     <!-- Toast messages -->
     <string name="connection_not_found">Check your internet connection</string>
+    <string name="enter_first_name">Enter first name</string>
+    <string name="enter_last_name">Enter last name</string>
+    <string name="enter_email">Enter email</string>
+    <string name="enter_correct_email">Enter correct email</string>
 
     <!-- Toolbar menu -->
     <string name="action_refresh">Refresh</string>
+    <string name="title_edit">Edit</string>
+
+    <!-- User Data -->
+    <string name="user_first_name">First name</string>
+    <string name="user_last_name">Last name</string>
+    <string name="user_email">Email</string>
+
+    <!-- Action -->
+    <string name="close">Close</string>
+    <string name="save">Save</string>
+
 </resources>

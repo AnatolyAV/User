@@ -1,5 +1,6 @@
 package ru.andreev_av.user.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +14,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ru.andreev_av.user.R;
 import ru.andreev_av.user.adapter.UserListAdapter;
@@ -21,6 +24,7 @@ import ru.andreev_av.user.model.UserModel;
 import ru.andreev_av.user.net.ConnectionDetector;
 import ru.andreev_av.user.net.IUserHttpRequest;
 import ru.andreev_av.user.net.UserHttpRequestRetrofit;
+import ru.andreev_av.user.utils.Constants;
 
 public class UserActivity extends AppCompatActivity implements UserHttpRequestRetrofit.OnActionUserHttpRequestListener {
 
@@ -32,6 +36,11 @@ public class UserActivity extends AppCompatActivity implements UserHttpRequestRe
     private UserListAdapter adapter;
     private List<UserModel> userList = new ArrayList<>();
     private RecyclerView rvUserList;
+
+    // каждый объект хранится отдельно, нужно для быстрого доступа к любому объекту по id (чтобы каждый раз не использовать перебор по всей коллекции userList)
+    // предпочтительно при условии что основными действиями будет обновление и добавление данных, а не их получение с сервера (судя по условиям задачи это так)
+    // иначе следует убрать и переделать обновление под работу с перебором по всей коллекции userList
+    private Map<Integer, UserModel> identityUserMap = new HashMap<>();
 
     private IUserHttpRequest userHttpRequest;
 
@@ -132,10 +141,27 @@ public class UserActivity extends AppCompatActivity implements UserHttpRequestRe
         }
     }
 
+    // сюда возврашается результат после редактирования или добавление элемента
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case Constants.REQUEST_USER_EDIT:
+                    userHttpRequest.updateUser((UserModel)data.getParcelableExtra(Constants.USER_OBJECT));
+                    break;
+            }
+        }
+    }
+
     @Override
     public void onGetUserList(List<UserModel> userList) {
         if (!userList.isEmpty()) {
             this.userList = userList;
+            identityUserMap.clear();
+            for (UserModel user : userList)
+                identityUserMap.put(user.getId(), user);
             adapter.refreshList(userList);
             adapter.notifyDataSetChanged();
         }
@@ -148,6 +174,14 @@ public class UserActivity extends AppCompatActivity implements UserHttpRequestRe
 
     @Override
     public void onUpdateUser(UserModel user) {
+        if (user!=null){
+            UserModel oldUser = identityUserMap.remove(user.getId());
+            userList.remove(oldUser);
+            identityUserMap.put(user.getId(),user);
+            userList.add(user);
+            adapter.refreshList(userList);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     @Override
