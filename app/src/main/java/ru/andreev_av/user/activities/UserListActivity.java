@@ -26,7 +26,7 @@ import ru.andreev_av.user.net.IUserHttpRequest;
 import ru.andreev_av.user.net.UserHttpRequestRetrofit;
 import ru.andreev_av.user.utils.Constants;
 
-public class UserActivity extends AppCompatActivity implements UserHttpRequestRetrofit.OnActionUserHttpRequestListener {
+public class UserListActivity extends AppCompatActivity implements UserHttpRequestRetrofit.OnActionUserHttpRequestListener {
 
     private Toolbar toolbar;
     private MenuItem updateItem;
@@ -83,7 +83,7 @@ public class UserActivity extends AppCompatActivity implements UserHttpRequestRe
         fabAddUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(UserActivity.this, EditUserActivity.class);
+                Intent intent = new Intent(UserListActivity.this, EditUserActivity.class);
                 startActivityForResult(intent, Constants.REQUEST_USER_ADD);
             }
         });
