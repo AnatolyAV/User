@@ -80,8 +80,13 @@ public class EditUserActivity extends AppCompatActivity {
                     return;
                 }
 
+                if (user == null) {
+                    user = new UserModel();
+                    user.setId(-1);
+                }
+
                 // чтобы лишний раз не сохранять - проверяем, были ли изменены данные
-                if (edited(user, newUserFirstName, newUserLastName, newUserEmail)) {
+                if (user.getId() == -1 || edited(user, newUserFirstName, newUserLastName, newUserEmail)) {
 
                     user.setFirstName(newUserFirstName);
                     user.setLastName(newUserLastName);
@@ -113,6 +118,11 @@ public class EditUserActivity extends AppCompatActivity {
             etUserLastName.setText(user.getLastName());
             etUserEmail.setText(user.getEmail());
             tvActionTypeName.setText(R.string.title_edit);
+        } else {
+            etUserFirstName.setText("");
+            etUserLastName.setText("");
+            etUserEmail.setText("");
+            tvActionTypeName.setText(R.string.title_add);
         }
     }
 

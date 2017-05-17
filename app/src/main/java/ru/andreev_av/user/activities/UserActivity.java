@@ -83,6 +83,8 @@ public class UserActivity extends AppCompatActivity implements UserHttpRequestRe
         fabAddUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(UserActivity.this, EditUserActivity.class);
+                startActivityForResult(intent, Constants.REQUEST_USER_ADD);
             }
         });
     }
@@ -151,6 +153,9 @@ public class UserActivity extends AppCompatActivity implements UserHttpRequestRe
                 case Constants.REQUEST_USER_EDIT:
                     userHttpRequest.updateUser((UserModel)data.getParcelableExtra(Constants.USER_OBJECT));
                     break;
+                case Constants.REQUEST_USER_ADD:
+                    userHttpRequest.addUser((UserModel)data.getParcelableExtra(Constants.USER_OBJECT));
+                    break;
             }
         }
     }
@@ -170,6 +175,12 @@ public class UserActivity extends AppCompatActivity implements UserHttpRequestRe
 
     @Override
     public void onAddUser(UserModel user) {
+        if (user!=null){
+            userList.add(user);
+            identityUserMap.put(user.getId(),user);
+            adapter.refreshList(userList);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     @Override

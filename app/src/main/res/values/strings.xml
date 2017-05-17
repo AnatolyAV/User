@@ -12,6 +12,7 @@
     <!-- Toolbar menu -->
     <string name="action_refresh">Refresh</string>
     <string name="title_edit">Edit</string>
+    <string name="title_add">Add</string>
 
     <!-- User Data -->
     <string name="user_first_name">First name</string>

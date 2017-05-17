@@ -25,6 +25,9 @@ public class UserModel implements Parcelable {
     @Expose
     private String avatarUrl;
 
+    public UserModel() {
+    }
+
     public UserModel(Parcel in) {
         readFromParcel(in);
     }
