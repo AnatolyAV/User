@@ -135,6 +135,8 @@ public class EditUserActivity extends AppCompatActivity {
             etUserEmail.setText("");
             tvActionTypeName.setText(R.string.title_add);
         }
+
+        etUserFirstName.setSelection(etUserFirstName.getText().length());
     }
 
     private boolean validate(String newUserFirstName, String newUserLastName, String newUserEmail) {
