@@ -151,10 +151,10 @@ public class UserListActivity extends AppCompatActivity implements UserHttpReque
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case Constants.REQUEST_USER_EDIT:
-                    userHttpRequest.updateUser((UserModel)data.getParcelableExtra(Constants.USER_OBJECT));
+                    userHttpRequest.updateUser((UserModel) data.getParcelableExtra(Constants.USER_OBJECT));
                     break;
                 case Constants.REQUEST_USER_ADD:
-                    userHttpRequest.addUser((UserModel)data.getParcelableExtra(Constants.USER_OBJECT));
+                    userHttpRequest.addUser((UserModel) data.getParcelableExtra(Constants.USER_OBJECT));
                     break;
             }
         }
@@ -169,29 +169,32 @@ public class UserListActivity extends AppCompatActivity implements UserHttpReque
                 identityUserMap.put(user.getId(), user);
             adapter.refreshList(userList);
             adapter.notifyDataSetChanged();
+            Toast.makeText(this, R.string.user_list_updated, Toast.LENGTH_SHORT).show();
         }
         setUpdateButtonState(false);
     }
 
     @Override
     public void onAddUser(UserModel user) {
-        if (user!=null){
+        if (user != null) {
             userList.add(user);
-            identityUserMap.put(user.getId(),user);
+            identityUserMap.put(user.getId(), user);
             adapter.refreshList(userList);
             adapter.notifyDataSetChanged();
+            Toast.makeText(this, getString(R.string.user_added, user.getFirstName() + " " + user.getLastName()), Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void onUpdateUser(UserModel user) {
-        if (user!=null){
+        if (user != null) {
             UserModel oldUser = identityUserMap.remove(user.getId());
             userList.remove(oldUser);
-            identityUserMap.put(user.getId(),user);
+            identityUserMap.put(user.getId(), user);
             userList.add(user);
             adapter.refreshList(userList);
             adapter.notifyDataSetChanged();
+            Toast.makeText(this, getString(R.string.user_updated, user.getFirstName() + " " + user.getLastName()), Toast.LENGTH_SHORT).show();
         }
     }
 

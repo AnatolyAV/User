@@ -8,6 +8,9 @@
     <string name="enter_last_name">Enter last name</string>
     <string name="enter_email">Enter email</string>
     <string name="enter_correct_email">Enter correct email</string>
+    <string name="user_list_updated">User list update</string>
+    <string name="user_updated">User %1$s update</string>
+    <string name="user_added">User: %1$s added</string>
 
     <!-- Toolbar menu -->
     <string name="action_refresh">Refresh</string>
