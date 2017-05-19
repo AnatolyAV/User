@@ -11,11 +11,13 @@
     <string name="user_list_updated">User list update</string>
     <string name="user_updated">User %1$s update</string>
     <string name="user_added">User: %1$s added</string>
+    <string name="updating_avatars_not_implemented">Updating avatars not implemented</string>
 
     <!-- Toolbar menu -->
     <string name="action_refresh">Refresh</string>
     <string name="title_edit">Edit</string>
     <string name="title_add">Add</string>
+    <string name="title_select_icon">Select icon</string>
 
     <!-- User Data -->
     <string name="user_first_name">First name</string>
@@ -25,5 +27,10 @@
     <!-- Action -->
     <string name="close">Close</string>
     <string name="save">Save</string>
+
+    <string name="no_data">No data</string>
+
+    <!-- Labels -->
+    <string name="avatar">Avatar</string>
 
 </resources>

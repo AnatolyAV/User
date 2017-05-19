@@ -1,7 +1,10 @@
 package ru.andreev_av.user.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -11,11 +14,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 import ru.andreev_av.user.R;
+import ru.andreev_av.user.api.AmazonawsApi;
 import ru.andreev_av.user.model.UserModel;
+import ru.andreev_av.user.net.AvatarHttpRequestAmazonaws;
 import ru.andreev_av.user.net.ConnectionDetector;
+import ru.andreev_av.user.net.IAvatarHttpRequest;
 import ru.andreev_av.user.utils.Constants;
 import ru.andreev_av.user.utils.EmailValidator;
+import ru.andreev_av.user.utils.ImageUtils;
 
 public class EditUserActivity extends AppCompatActivity {
 
@@ -27,12 +40,20 @@ public class EditUserActivity extends AppCompatActivity {
     private EditText etUserFirstName;
     private EditText etUserLastName;
     private EditText etUserEmail;
+    private CircleImageView imgAvatar;
 
     private UserModel user;
 
     private EmailValidator emailValidator = new EmailValidator();
 
     private ConnectionDetector connectionDetector;
+
+    private ImageUtils imageUtils;
+    private String formattedDate;
+    private Bitmap selectedAvatarBitmap = null;
+    private IAvatarHttpRequest avatarHttpRequest;
+
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss", Locale.US);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +70,12 @@ public class EditUserActivity extends AppCompatActivity {
 
         connectionDetector = new ConnectionDetector(this);
 
+        avatarHttpRequest = new AvatarHttpRequestAmazonaws(this);
+
+        imageUtils = new ImageUtils(this);
+
         initComponents();
+
     }
 
     private void findComponents() {
@@ -61,6 +87,7 @@ public class EditUserActivity extends AppCompatActivity {
         etUserFirstName = (EditText) findViewById(R.id.et_user_first_name);
         etUserLastName = (EditText) findViewById(R.id.et_user_last_name);
         etUserEmail = (EditText) findViewById(R.id.et_user_email);
+        imgAvatar = (CircleImageView) findViewById(R.id.img_avatar);
     }
 
     protected void initToolbar() {
@@ -75,6 +102,20 @@ public class EditUserActivity extends AppCompatActivity {
                 if (hasFocus) {
                     if (getWindow() != null)
                         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                }
+            }
+        });
+
+        imgAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (user == null || (user.getId() == null && user.getId() == -1)) {
+                    Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                    photoPickerIntent.setType("image/*");
+                    startActivityForResult(photoPickerIntent, Constants.REQUEST_AVATAR_SELECT);
+                }
+                else{
+                    Toast.makeText(EditUserActivity.this, R.string.updating_avatars_not_implemented, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -94,6 +135,10 @@ public class EditUserActivity extends AppCompatActivity {
                 if (user == null) {
                     user = new UserModel();
                     user.setId(-1);
+                    if (selectedAvatarBitmap != null) {
+                        String s3url = AmazonawsApi.URL_WITH_BUCKET + formattedDate + ".png";
+                        user.setAvatarUrl(s3url);
+                    }
                 }
 
                 // чтобы лишний раз не сохранять - проверяем, были ли изменены данные
@@ -104,12 +149,13 @@ public class EditUserActivity extends AppCompatActivity {
                     user.setEmail(newUserEmail);
 
                     if (connectionDetector.isNetworkAvailableAndConnected()) {
+                        if (user.getId() == -1)
+                            avatarHttpRequest.addUserAvatar(formattedDate);
                         Intent intent = new Intent();
                         intent.putExtra(Constants.USER_OBJECT, user);
                         setResult(RESULT_OK, intent);
                         finish();
-                    }
-                    else
+                    } else
                         Toast.makeText(EditUserActivity.this, R.string.connection_not_found, Toast.LENGTH_SHORT).show();
                 }
             }
@@ -174,5 +220,26 @@ public class EditUserActivity extends AppCompatActivity {
                 (user.getFirstName() != null && newUserFirstName != null && !user.getFirstName().equals(newUserFirstName)) ||
                 (user.getLastName() != null && newUserLastName != null && !user.getLastName().equals(newUserLastName)) ||
                 (user.getEmail() != null && newUserEmail != null && !user.getEmail().equals(newUserEmail));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+
+        if (resultCode == RESULT_OK) {
+
+            if (requestCode == Constants.REQUEST_AVATAR_SELECT) {
+                Uri selectedImage = imageReturnedIntent.getData();
+                try {
+                    selectedAvatarBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImage);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                imgAvatar.setImageBitmap(selectedAvatarBitmap);
+                formattedDate = sdf.format(Calendar.getInstance().getTime());
+                imageUtils.saveBitmap(selectedAvatarBitmap, formattedDate);
+            }
+        }
+
     }
 }
