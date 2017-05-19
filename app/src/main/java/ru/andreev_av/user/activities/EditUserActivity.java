@@ -32,6 +32,8 @@ import ru.andreev_av.user.utils.Constants;
 import ru.andreev_av.user.utils.EmailValidator;
 import ru.andreev_av.user.utils.ImageUtils;
 
+import static ru.andreev_av.user.utils.Constants.AVATAR_FILE_NAME;
+
 public class EditUserActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
@@ -76,8 +78,12 @@ public class EditUserActivity extends AppCompatActivity {
 
         imageUtils = new ImageUtils(this);
 
-        initComponents();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initComponents();
     }
 
     private void findComponents() {
@@ -195,6 +201,12 @@ public class EditUserActivity extends AppCompatActivity {
             etUserLastName.setText("");
             etUserEmail.setText("");
             tvActionTypeName.setText(R.string.title_add);
+
+            if (formattedDate != null) {
+                selectedAvatarBitmap = imageUtils.loadBitmap(formattedDate);
+                if (selectedAvatarBitmap != null)
+                    imgAvatar.setImageBitmap(selectedAvatarBitmap);
+            }
         }
 
         etUserFirstName.setSelection(etUserFirstName.getText().length());
@@ -255,6 +267,15 @@ public class EditUserActivity extends AppCompatActivity {
                 imageUtils.saveBitmap(selectedAvatarBitmap, formattedDate);
             }
         }
+    }
 
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(AVATAR_FILE_NAME, formattedDate);
+    }
+
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        formattedDate = savedInstanceState.getString(AVATAR_FILE_NAME);
     }
 }

@@ -2,6 +2,7 @@ package ru.andreev_av.user.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import java.io.FileOutputStream;
 
@@ -20,5 +21,9 @@ public class ImageUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public Bitmap loadBitmap(String fileName) {
+        return BitmapFactory.decodeFile(context.getCacheDir().toString() + fileName);
     }
 }
