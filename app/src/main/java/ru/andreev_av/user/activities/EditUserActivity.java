@@ -150,7 +150,7 @@ public class EditUserActivity extends AppCompatActivity {
                     user.setEmail(newUserEmail);
 
                     if (connectionDetector.isNetworkAvailableAndConnected()) {
-                        if (user.getId() == -1)
+                        if (user.getId() == -1 && user.getAvatarUrl() != null)
                             avatarHttpRequest.addUserAvatar(formattedDate);
                         Intent intent = new Intent();
                         intent.putExtra(Constants.USER_OBJECT, user);
