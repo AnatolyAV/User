@@ -137,12 +137,14 @@ public class UserListActivity extends AppCompatActivity implements UserHttpReque
     }
 
     protected void setUpdateButtonState(boolean isUpdate) {
-        if (isUpdate) {
-            updateItem.setVisible(false);
-            progressUpdate.setVisibility(View.VISIBLE);
-        } else {
-            progressUpdate.setVisibility(View.GONE);
-            updateItem.setVisible(true);
+        if (updateItem != null && progressUpdate != null) {
+            if (isUpdate) {
+                updateItem.setVisible(false);
+                progressUpdate.setVisibility(View.VISIBLE);
+            } else {
+                progressUpdate.setVisibility(View.GONE);
+                updateItem.setVisible(true);
+            }
         }
     }
 
