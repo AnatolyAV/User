@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -113,8 +115,7 @@ public class EditUserActivity extends AppCompatActivity {
                     Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                     photoPickerIntent.setType("image/*");
                     startActivityForResult(photoPickerIntent, Constants.REQUEST_AVATAR_SELECT);
-                }
-                else{
+                } else {
                     Toast.makeText(EditUserActivity.this, R.string.updating_avatars_not_implemented, Toast.LENGTH_SHORT).show();
                 }
             }
@@ -175,6 +176,20 @@ public class EditUserActivity extends AppCompatActivity {
             etUserLastName.setText(user.getLastName());
             etUserEmail.setText(user.getEmail());
             tvActionTypeName.setText(R.string.title_edit);
+
+            String avatarUrl = user.getAvatarUrl();
+            if (avatarUrl != null && !avatarUrl.isEmpty() && avatarUrl.length() > 0) {
+                Picasso.with(this)
+                        .load(avatarUrl)
+                        .fit()
+                        .noFade()
+                        .placeholder(R.mipmap.ic_launcher)
+                        .error(R.mipmap.ic_launcher)
+                        .into(imgAvatar);
+            } else {
+                imgAvatar.setImageResource(R.mipmap.ic_launcher);
+            }
+
         } else {
             etUserFirstName.setText("");
             etUserLastName.setText("");
