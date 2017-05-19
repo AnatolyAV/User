@@ -19,6 +19,7 @@
     <string name="title_edit">Edit</string>
     <string name="title_add">Add</string>
     <string name="title_select_icon">Select icon</string>
+    <string name="title_user_list">User list</string>
 
     <!-- User Data -->
     <string name="user_first_name">First name</string>
