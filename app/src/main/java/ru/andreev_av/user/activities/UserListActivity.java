@@ -1,5 +1,6 @@
 package ru.andreev_av.user.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -49,6 +50,8 @@ public class UserListActivity extends AppCompatActivity implements UserHttpReque
 
     private ConnectionDetector connectionDetector;
 
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,8 +71,11 @@ public class UserListActivity extends AppCompatActivity implements UserHttpReque
 
         connectionDetector = new ConnectionDetector(this);
 
-        if (connectionDetector.isNetworkAvailableAndConnected())
+        if (connectionDetector.isNetworkAvailableAndConnected()) {
+            if (!progressDialog.isShowing())
+                progressDialog.show();
             userHttpRequest.getUserList();
+        }
         else
             Toast.makeText(this, R.string.connection_not_found, Toast.LENGTH_SHORT).show();
 
@@ -104,6 +110,8 @@ public class UserListActivity extends AppCompatActivity implements UserHttpReque
         rvUserList.setAdapter(adapter);
         rvUserList.setHasFixedSize(true);
         rvUserList.setLayoutManager(new LinearLayoutManager(this));
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getResources().getString(R.string.loading));
     }
 
     @Override
@@ -156,9 +164,13 @@ public class UserListActivity extends AppCompatActivity implements UserHttpReque
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case Constants.REQUEST_USER_EDIT:
+                    if (!progressDialog.isShowing())
+                        progressDialog.show();
                     userHttpRequest.updateUser((UserModel) data.getParcelableExtra(Constants.USER_OBJECT));
                     break;
                 case Constants.REQUEST_USER_ADD:
+                    if (!progressDialog.isShowing())
+                        progressDialog.show();
                     userHttpRequest.addUser((UserModel) data.getParcelableExtra(Constants.USER_OBJECT));
                     break;
             }
@@ -178,6 +190,9 @@ public class UserListActivity extends AppCompatActivity implements UserHttpReque
         Toast.makeText(this, R.string.user_list_updated, Toast.LENGTH_SHORT).show();
         Log.d(TAG, String.valueOf(R.string.user_list_updated));
         setUpdateButtonState(false);
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
     }
 
     @Override
@@ -189,6 +204,9 @@ public class UserListActivity extends AppCompatActivity implements UserHttpReque
             adapter.notifyDataSetChanged();
             Toast.makeText(this, getString(R.string.user_added, user.getFirstName() + " " + user.getLastName()), Toast.LENGTH_SHORT).show();
             Log.d(TAG, getString(R.string.user_added, user.getFirstName() + " " + user.getLastName()));
+        }
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
         }
     }
 
@@ -204,11 +222,17 @@ public class UserListActivity extends AppCompatActivity implements UserHttpReque
             Toast.makeText(this, getString(R.string.user_updated, user.getFirstName() + " " + user.getLastName()), Toast.LENGTH_SHORT).show();
             Log.d(TAG, getString(R.string.user_updated, user.getFirstName() + " " + user.getLastName()));
         }
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
     }
 
     @Override
     public void onError(String errorMessage) {
         Toast.makeText(this, R.string.error_performing_operation, Toast.LENGTH_SHORT).show();
         Log.e(TAG, errorMessage);
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
     }
 }
