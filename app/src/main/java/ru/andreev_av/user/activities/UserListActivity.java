@@ -128,8 +128,6 @@ public class UserListActivity extends AppCompatActivity implements UserHttpReque
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.action_settings:
-                return true;
             case R.id.action_refresh:
                 if (connectionDetector.isNetworkAvailableAndConnected()) {
                     userHttpRequest.getUserList();
