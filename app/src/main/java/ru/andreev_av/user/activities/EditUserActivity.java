@@ -53,7 +53,7 @@ public class EditUserActivity extends AppCompatActivity {
     private ConnectionDetector connectionDetector;
 
     private ImageUtils imageUtils;
-    private String formattedDate;
+    private String avatarFileName;
     private Bitmap selectedAvatarBitmap = null;
     private IAvatarHttpRequest avatarHttpRequest;
 
@@ -143,7 +143,7 @@ public class EditUserActivity extends AppCompatActivity {
                     user = new UserModel();
                     user.setId(-1);
                     if (selectedAvatarBitmap != null) {
-                        String s3url = AmazonawsApi.URL_WITH_BUCKET + formattedDate + ".png";
+                        String s3url = AmazonawsApi.URL_WITH_BUCKET + avatarFileName + ".png";
                         user.setAvatarUrl(s3url);
                     }
                 }
@@ -157,7 +157,7 @@ public class EditUserActivity extends AppCompatActivity {
 
                     if (connectionDetector.isNetworkAvailableAndConnected()) {
                         if (user.getId() == -1 && user.getAvatarUrl() != null)
-                            avatarHttpRequest.addUserAvatar(formattedDate);
+                            avatarHttpRequest.addUserAvatar(avatarFileName);
                         Intent intent = new Intent();
                         intent.putExtra(Constants.USER_OBJECT, user);
                         setResult(RESULT_OK, intent);
@@ -202,8 +202,8 @@ public class EditUserActivity extends AppCompatActivity {
             etUserEmail.setText("");
             tvActionTypeName.setText(R.string.title_add);
 
-            if (formattedDate != null) {
-                selectedAvatarBitmap = imageUtils.loadBitmap(formattedDate);
+            if (avatarFileName != null) {
+                selectedAvatarBitmap = imageUtils.loadBitmap(avatarFileName);
                 if (selectedAvatarBitmap != null)
                     imgAvatar.setImageBitmap(selectedAvatarBitmap);
             }
@@ -263,19 +263,19 @@ public class EditUserActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 imgAvatar.setImageBitmap(selectedAvatarBitmap);
-                formattedDate = sdf.format(Calendar.getInstance().getTime());
-                imageUtils.saveBitmap(selectedAvatarBitmap, formattedDate);
+                avatarFileName = sdf.format(Calendar.getInstance().getTime());
+                imageUtils.saveBitmap(selectedAvatarBitmap, avatarFileName);
             }
         }
     }
 
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(AVATAR_FILE_NAME, formattedDate);
+        outState.putString(AVATAR_FILE_NAME, avatarFileName);
     }
 
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        formattedDate = savedInstanceState.getString(AVATAR_FILE_NAME);
+        avatarFileName = savedInstanceState.getString(AVATAR_FILE_NAME);
     }
 }

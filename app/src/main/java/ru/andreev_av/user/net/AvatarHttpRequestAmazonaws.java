@@ -23,7 +23,7 @@ public class AvatarHttpRequestAmazonaws implements IAvatarHttpRequest {
     }
 
     @Override
-    public void addUserAvatar(final String avatarName) {
+    public void addUserAvatar(final String avatarFileName) {
 
         if (credentialsProvider == null) {
             credentialsProvider = new CognitoCachingCredentialsProvider(context.getApplicationContext()
@@ -39,9 +39,9 @@ public class AvatarHttpRequestAmazonaws implements IAvatarHttpRequest {
             transferUtility = new TransferUtility(s3Client, context.getApplicationContext());
         }
 
-        final File avatarFile = new File(context.getCacheDir() + avatarName);
+        final File avatarFile = new File(context.getCacheDir() + avatarFileName);
         // TODO 1. По хорошему следует повесить слушать observer.setTransferListener(new TransferListener())
         // и отслеживать изменения(успешно ли загрузилась картинка на сервер или возникла ошибка) (в данной задаче, думаю не критично)
-        transferUtility.upload(AmazonawsApi.BUCKET_NAME, avatarName + ".png", avatarFile);
+        transferUtility.upload(AmazonawsApi.BUCKET_NAME, avatarFileName + ".png", avatarFile);
     }
 }
