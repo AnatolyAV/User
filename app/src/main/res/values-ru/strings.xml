@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">Пользователь</string>
+
+    <!-- Toast messages -->
+    <string name="connection_not_found">Проверьте подключение к Интернету</string>
+    <string name="enter_first_name">Введите имя</string>
+    <string name="enter_last_name">Введите фамилию</string>
+    <string name="enter_email">Введите адрес электронной почты</string>
+    <string name="enter_correct_email">Введите корректный адрес электронной почты</string>
+    <string name="user_list_updated">Список пользователей обновлен</string>
+    <string name="user_updated">Пользователь %1$s обновлен</string>
+    <string name="user_added">Пользователь: %1$s добавлен</string>
+    <string name="updating_avatars_not_implemented">Обновление аватаров не реализовано</string>
+    <string name="error_performing_operation">Ошибка при выполнении операции</string>
+
+    <!-- Toolbar menu -->
+    <string name="action_refresh">Обновить</string>
+    <string name="title_edit">Редактирование</string>
+    <string name="title_add">Добавления</string>
+    <string name="title_select_icon">Select icon</string>
+    <string name="title_user_list">Список пользователей</string>
+
+    <!-- User Data -->
+    <string name="user_first_name">Имя</string>
+    <string name="user_last_name">Фамилия</string>
+    <string name="user_email">Почта</string>
+
+    <!-- Action -->
+    <string name="close">Закрыть</string>
+    <string name="save">Сохранить</string>
+
+    <string name="no_data">Нет данных</string>
+    <string name="loading">Загрузка\u2026</string>
+
+    <!-- Labels -->
+    <string name="avatar">Аватар</string>
+
+</resources>
