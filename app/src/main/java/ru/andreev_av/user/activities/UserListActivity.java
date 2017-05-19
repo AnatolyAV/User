@@ -174,8 +174,8 @@ public class UserListActivity extends AppCompatActivity implements UserHttpReque
                 identityUserMap.put(user.getId(), user);
             adapter.refreshList(userList);
             adapter.notifyDataSetChanged();
-            Toast.makeText(this, R.string.user_list_updated, Toast.LENGTH_SHORT).show();
         }
+        Toast.makeText(this, R.string.user_list_updated, Toast.LENGTH_SHORT).show();
         Log.d(TAG, String.valueOf(R.string.user_list_updated));
         setUpdateButtonState(false);
     }
