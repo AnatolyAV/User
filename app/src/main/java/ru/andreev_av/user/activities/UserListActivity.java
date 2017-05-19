@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +28,8 @@ import ru.andreev_av.user.net.UserHttpRequestRetrofit;
 import ru.andreev_av.user.utils.Constants;
 
 public class UserListActivity extends AppCompatActivity implements UserHttpRequestRetrofit.OnActionUserHttpRequestListener {
+
+    private static final String TAG = UserListActivity.class.getName();
 
     private Toolbar toolbar;
     private MenuItem updateItem;
@@ -200,5 +203,7 @@ public class UserListActivity extends AppCompatActivity implements UserHttpReque
 
     @Override
     public void onError(String errorMessage) {
+        Toast.makeText(this, R.string.error_performing_operation, Toast.LENGTH_SHORT).show();
+        Log.e(TAG, errorMessage);
     }
 }
