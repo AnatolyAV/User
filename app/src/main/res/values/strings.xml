@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">User</string>
+    <string name="app_name">Users</string>
 
     <!-- Toast messages -->
     <string name="connection_not_found">Check your internet connection</string>
