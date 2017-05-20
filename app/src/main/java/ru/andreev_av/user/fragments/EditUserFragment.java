@@ -16,7 +16,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import ru.andreev_av.user.R;
 import ru.andreev_av.user.model.UserModel;
 import ru.andreev_av.user.utils.Constants;
-import ru.andreev_av.user.utils.EmailValidator;
 
 public class EditUserFragment extends Fragment {
 
@@ -26,8 +25,6 @@ public class EditUserFragment extends Fragment {
     private CircleImageView imgAvatar;
 
     private UserModel user;
-
-    private EmailValidator emailValidator = new EmailValidator();
 
     public EditUserFragment() {
         // Required empty public constructor
@@ -121,39 +118,5 @@ public class EditUserFragment extends Fragment {
         return getArguments().getInt(Constants.USER_POSITION, 0);
     }
 
-    // для проверки, изменились ли данные пользователя
-    public boolean edited(UserModel user, String newUserFirstName, String newUserLastName, String newUserEmail) {
-        // описываем условия, при которых будет считаться, что произошло редактирование - чтобы сохранять только при изменении данных
-        // если хотя бы одно из условий равно true - значит запись была отредактирована
-        return (user.getFirstName() == null && newUserFirstName != null) ||
-                (user.getLastName() == null && newUserLastName != null) ||
-                (user.getEmail() == null && newUserEmail != null) ||
-                (user.getFirstName() != null && newUserFirstName != null && !user.getFirstName().equals(newUserFirstName)) ||
-                (user.getLastName() != null && newUserLastName != null && !user.getLastName().equals(newUserLastName)) ||
-                (user.getEmail() != null && newUserEmail != null && !user.getEmail().equals(newUserEmail));
-    }
-    public boolean validate(String newUserFirstName, String newUserLastName, String newUserEmail) {
 
-        if (newUserFirstName.trim().length() == 0) {
-            Toast.makeText(getActivity(), R.string.enter_first_name, Toast.LENGTH_SHORT).show();
-            etUserFirstName.requestFocus();
-            return false;
-        }
-        if (newUserLastName.trim().length() == 0) {
-            Toast.makeText(getActivity(), R.string.enter_last_name, Toast.LENGTH_SHORT).show();
-            etUserLastName.requestFocus();
-            return false;
-        }
-        if (newUserEmail.trim().length() == 0) {
-            Toast.makeText(getActivity(), R.string.enter_email, Toast.LENGTH_SHORT).show();
-            etUserEmail.requestFocus();
-            return false;
-        }
-        if (!emailValidator.validate(newUserEmail)) {
-            Toast.makeText(getActivity(), R.string.enter_correct_email, Toast.LENGTH_SHORT).show();
-            etUserEmail.requestFocus();
-            return false;
-        }
-        return true;
-    }
 }

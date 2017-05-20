@@ -24,6 +24,7 @@ import ru.andreev_av.user.net.ConnectionDetector;
 import ru.andreev_av.user.net.IAvatarHttpRequest;
 import ru.andreev_av.user.net.IUserHttpRequest;
 import ru.andreev_av.user.utils.Constants;
+import ru.andreev_av.user.utils.EmailValidator;
 import ru.andreev_av.user.utils.ImageUtils;
 
 import static ru.andreev_av.user.utils.Constants.AVATAR_FILE_NAME;
@@ -55,6 +56,8 @@ public abstract class AbstractUserActivity extends AppCompatActivity {
     protected ImageUtils imageUtils;
 
     protected PaneMode paneMode;
+
+    private EmailValidator emailValidator = new EmailValidator();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +99,7 @@ public abstract class AbstractUserActivity extends AppCompatActivity {
                     String newUserLastName = etUserLastName.getText().toString();
                     String newUserEmail = etUserEmail.getText().toString();
 
-                    if (!editUserFragment.validate(newUserFirstName, newUserLastName, newUserEmail)) {
+                    if (!validate(newUserFirstName, newUserLastName, newUserEmail)) {
                         return;
                     }
 
@@ -110,7 +113,7 @@ public abstract class AbstractUserActivity extends AppCompatActivity {
                     }
 
                     // чтобы лишний раз не сохранять - проверяем, были ли изменены данные
-                    if (currentUser.getId() == -1 || editUserFragment.edited(currentUser, newUserFirstName, newUserLastName, newUserEmail)) {
+                    if (currentUser.getId() == -1 || edited(currentUser, newUserFirstName, newUserLastName, newUserEmail)) {
 
                         currentUser.setFirstName(newUserFirstName);
                         currentUser.setLastName(newUserLastName);
@@ -156,6 +159,42 @@ public abstract class AbstractUserActivity extends AppCompatActivity {
 
     protected void initImageUtils() {
         imageUtils = new ImageUtils(this);
+    }
+
+    // для проверки, изменились ли данные пользователя
+    public boolean edited(UserModel user, String newUserFirstName, String newUserLastName, String newUserEmail) {
+        // описываем условия, при которых будет считаться, что произошло редактирование - чтобы сохранять только при изменении данных
+        // если хотя бы одно из условий равно true - значит запись была отредактирована
+        return (user.getFirstName() == null && newUserFirstName != null) ||
+                (user.getLastName() == null && newUserLastName != null) ||
+                (user.getEmail() == null && newUserEmail != null) ||
+                (user.getFirstName() != null && newUserFirstName != null && !user.getFirstName().equals(newUserFirstName)) ||
+                (user.getLastName() != null && newUserLastName != null && !user.getLastName().equals(newUserLastName)) ||
+                (user.getEmail() != null && newUserEmail != null && !user.getEmail().equals(newUserEmail));
+    }
+    public boolean validate(String newUserFirstName, String newUserLastName, String newUserEmail) {
+
+        if (newUserFirstName.trim().length() == 0) {
+            Toast.makeText(this, R.string.enter_first_name, Toast.LENGTH_SHORT).show();
+            etUserFirstName.requestFocus();
+            return false;
+        }
+        if (newUserLastName.trim().length() == 0) {
+            Toast.makeText(this, R.string.enter_last_name, Toast.LENGTH_SHORT).show();
+            etUserLastName.requestFocus();
+            return false;
+        }
+        if (newUserEmail.trim().length() == 0) {
+            Toast.makeText(this, R.string.enter_email, Toast.LENGTH_SHORT).show();
+            etUserEmail.requestFocus();
+            return false;
+        }
+        if (!emailValidator.validate(newUserEmail)) {
+            Toast.makeText(this, R.string.enter_correct_email, Toast.LENGTH_SHORT).show();
+            etUserEmail.requestFocus();
+            return false;
+        }
+        return true;
     }
 
     protected void onSaveInstanceState(Bundle outState) {
