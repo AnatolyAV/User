@@ -4,6 +4,7 @@ public class Constants {
 
     public final static String USER_OBJECT = "UserObject";
     public final static String AVATAR_FILE_NAME = "AvatarFileName";
+    public final static String USER_POSITION = "UserPosition";
 
     public final static int REQUEST_USER_EDIT = 1;
     public final static int REQUEST_USER_ADD = 2;

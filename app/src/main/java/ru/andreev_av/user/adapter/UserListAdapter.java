@@ -1,8 +1,6 @@
 package ru.andreev_av.user.adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,14 +11,14 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import ru.andreev_av.user.R;
-import ru.andreev_av.user.activities.EditUserActivity;
 import ru.andreev_av.user.adapter.holder.UserViewHolder;
+import ru.andreev_av.user.fragments.UserListFragment;
 import ru.andreev_av.user.model.UserModel;
-import ru.andreev_av.user.utils.Constants;
 
 public class UserListAdapter extends RecyclerView.Adapter<UserViewHolder> {
 
     private Context context;
+    private UserListFragment.onUserItemClickListener listener;
     private List<UserModel> userList;
 
     public UserListAdapter(Context context, List<UserModel> userList) {
@@ -35,13 +33,13 @@ public class UserListAdapter extends RecyclerView.Adapter<UserViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(UserViewHolder holder, int position) {
+    public void onBindViewHolder(UserViewHolder holder, final int position) {
         final UserModel user = userList.get(position);
 
         holder.cvUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openEditUserActivityOnClick(user);
+                listener.userItemClick(position, user);
             }
         });
 
@@ -70,11 +68,10 @@ public class UserListAdapter extends RecyclerView.Adapter<UserViewHolder> {
 
     public void refreshList(List<UserModel> list) {
         userList = list;
+        notifyDataSetChanged();
     }
 
-    private void openEditUserActivityOnClick(final UserModel user){
-        Intent intent = new Intent(context, EditUserActivity.class);
-        intent.putExtra(Constants.USER_OBJECT, user);
-        ((Activity)context).startActivityForResult(intent, Constants.REQUEST_USER_EDIT);
+    public void setListener(UserListFragment.onUserItemClickListener listener) {
+        this.listener = listener;
     }
 }

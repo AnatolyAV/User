@@ -6,21 +6,28 @@
     android:layout_height="match_parent"
     tools:context="ru.andreev_av.user.activities.UserListActivity">
 
-    <include layout="@layout/toolbar_user_one_pane" />
+    <include layout="@layout/toolbar_user_two_pane" />
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/LinearLayout1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
         <FrameLayout
             android:id="@+id/users"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            >
+            android:layout_weight="1">
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/user_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
         </FrameLayout>
     </LinearLayout>
 

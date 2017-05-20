@@ -1,65 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp">
+    android:id="@+id/cv_user">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/cv_user"
+    <RelativeLayout
+        android:id="@+id/layout_user"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="5dp"
-        android:clickable="true"
-        android:clipChildren="false"
         android:foreground="?android:attr/selectableItemBackground"
-        android:paddingTop="10dp"
-        card_view:cardCornerRadius="5dp"
-        card_view:contentPadding="15dp">
+        android:layout_height="wrap_content">
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:id="@+id/layout_avatar"
+            android:layout_width="@dimen/avatar_size"
+            android:layout_height="@dimen/avatar_size">
 
-            <RelativeLayout
-                android:id="@+id/layout_avatar"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/img_avatar"
                 android:layout_width="@dimen/avatar_size"
-                android:layout_height="@dimen/avatar_size">
+                android:layout_height="@dimen/avatar_size"
+                android:src="@mipmap/ic_launcher" />
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/img_avatar"
-                    android:layout_width="@dimen/avatar_size"
-                    android:layout_height="@dimen/avatar_size"
-                    android:src="@mipmap/ic_launcher" />
-
-            </RelativeLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/activity_vertical_margin"
-                android:layout_marginStart="@dimen/activity_vertical_margin"
-                android:layout_toEndOf="@+id/layout_avatar"
-                android:layout_toRightOf="@+id/layout_avatar"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_name"
-                    style="@style/UserNameTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Vasia Vasilev" />
-
-                <TextView
-                    android:id="@+id/tv_email"
-                    style="@style/UserEmailTextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="dsfs@gmail.com" />
-
-            </LinearLayout>
         </RelativeLayout>
-    </android.support.v7.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:layout_marginStart="@dimen/activity_vertical_margin"
+            android:layout_toEndOf="@+id/layout_avatar"
+            android:layout_toRightOf="@+id/layout_avatar"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_name"
+                style="@style/UserNameTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Vasia Vasilev" />
+
+            <TextView
+                android:id="@+id/tv_email"
+                style="@style/UserEmailTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="dsfs@gmail.com" />
+
+        </LinearLayout>
+        <View
+            android:id="@+id/line_separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/layout_avatar"
+            android:layout_gravity="bottom"
+            android:layout_marginTop="12dp"
+            android:background="@color/colorGray" />
+    </RelativeLayout>
 </LinearLayout>
