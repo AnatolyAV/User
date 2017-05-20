@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -49,7 +50,7 @@ public class EditUserActivity extends AbstractUserActivity {
         initImageUtils();
 
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && isLarge()) {
-            finish();
+            ActivityCompat.finishAfterTransition(this);
             return;
         }
 
@@ -80,7 +81,7 @@ public class EditUserActivity extends AbstractUserActivity {
         imgClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                ActivityCompat.finishAfterTransition(EditUserActivity.this);
             }
         });
     }

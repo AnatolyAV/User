@@ -3,6 +3,7 @@ package ru.andreev_av.user.activities;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -126,7 +127,7 @@ public abstract class AbstractUserActivity extends AppCompatActivity {
                             intent.putExtra(Constants.USER_OBJECT, currentUser);
                             setResult(RESULT_OK, intent);
                             if (paneMode == PaneMode.OnePaneMode)
-                                finish();
+                                ActivityCompat.finishAfterTransition(AbstractUserActivity.this);
                             else {
                                 if (currentUser.getId() == -1)
                                     userHttpRequest.addUser(currentUser);
