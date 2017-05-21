@@ -243,6 +243,7 @@ public class UserListActivity extends AbstractUserActivity implements UserHttpRe
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
+        setUpdateButtonState(false);
     }
 
     @Override
