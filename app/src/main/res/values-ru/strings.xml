@@ -16,7 +16,7 @@
     <!-- Toolbar menu -->
     <string name="action_refresh">Обновить</string>
     <string name="title_edit">Редактирование</string>
-    <string name="title_add">Добавления</string>
+    <string name="title_add">Добавление</string>
     <string name="title_user_list">Список пользователей</string>
 
     <!-- User Data -->
