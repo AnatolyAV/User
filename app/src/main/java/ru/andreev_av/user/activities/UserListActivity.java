@@ -93,13 +93,6 @@ public class UserListActivity extends AbstractUserActivity implements UserHttpRe
         withEditUserFragment = (findViewById(R.id.user_content) != null);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        findComponentsAvatarViewFromFragment();
-        initImageAvatar();
-    }
-
     protected void findComponents() {
         super.findComponents();
         toolbar = (Toolbar) findViewById(R.id.toolbar);

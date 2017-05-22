@@ -53,9 +53,14 @@ public class EditUserActivity extends AbstractUserActivity {
             ActivityCompat.finishAfterTransition(this);
             return;
         }
-
-        initEditUserFragment();
-
+        if (savedInstanceState == null)
+            initEditUserFragment();
+        else {
+            if (editUserFragment == null) {
+                editUserFragment = (EditUserFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.user_content);
+            }
+        }
     }
 
     private boolean isLarge() {
@@ -65,6 +70,7 @@ public class EditUserActivity extends AbstractUserActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        findComponentsEditTextFromFragment();
         findComponentsAvatarViewFromFragment();
         initImageAvatar();
     }
@@ -94,11 +100,11 @@ public class EditUserActivity extends AbstractUserActivity {
         }
     }
 
-    private void initEditUserFragment(){
+    private void initEditUserFragment() {
         editUserFragment = EditUserFragment.newInstance(getIntent()
                 .getIntExtra(Constants.USER_POSITION, 0), (UserModel) getIntent().getParcelableExtra(Constants.USER_OBJECT));
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.user_content, editUserFragment).commit();
+                .add(R.id.user_content, editUserFragment).commit();
     }
 
     @Override
