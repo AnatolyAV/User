@@ -7,8 +7,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -30,7 +31,7 @@ public class UserListActivity extends AbstractUserActivity implements UserHttpRe
 
     private static final String TAG = UserListActivity.class.getName();
 
-    private ImageView imgRefresh;
+    private MenuItem updateItem;
     private ProgressBar progressUpdate;
 
     private FloatingActionButton fabAddUser;
@@ -98,7 +99,6 @@ public class UserListActivity extends AbstractUserActivity implements UserHttpRe
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         progressUpdate = (ProgressBar) findViewById(R.id.toolbar_progress_bar);
         fabAddUser = (FloatingActionButton) findViewById(R.id.fab_add_user);
-        imgRefresh = (ImageView) findViewById(R.id.action_refresh);
     }
 
     protected void initListeners() {
@@ -108,18 +108,6 @@ public class UserListActivity extends AbstractUserActivity implements UserHttpRe
             public void onClick(View view) {
                 Intent intent = new Intent(UserListActivity.this, EditUserActivity.class);
                 startActivityForResult(intent, Constants.REQUEST_USER_ADD);
-            }
-        });
-        imgRefresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (connectionDetector.isNetworkAvailableAndConnected()) {
-                    userHttpRequest.getUserList();
-                    setUpdateButtonState(true);
-                } else {
-                    Toast.makeText(UserListActivity.this, R.string.connection_not_found, Toast.LENGTH_SHORT).show();
-                    setUpdateButtonState(false);
-                }
             }
         });
     }
@@ -137,14 +125,42 @@ public class UserListActivity extends AbstractUserActivity implements UserHttpRe
         userHttpRequest = new UserHttpRequestRetrofit(this);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_user, menu);
+        updateItem = menu.findItem(R.id.action_refresh);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.action_refresh:
+                if (connectionDetector.isNetworkAvailableAndConnected()) {
+                    userHttpRequest.getUserList();
+                    setUpdateButtonState(true);
+                } else {
+                    Toast.makeText(this, R.string.connection_not_found, Toast.LENGTH_SHORT).show();
+                    setUpdateButtonState(false);
+                }
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     protected void setUpdateButtonState(boolean isUpdate) {
-        if (imgRefresh != null && progressUpdate != null) {
+        if (updateItem != null && progressUpdate != null) {
             if (isUpdate) {
-                imgRefresh.setVisibility(View.GONE);
+                updateItem.setVisible(false);
                 progressUpdate.setVisibility(View.VISIBLE);
             } else {
                 progressUpdate.setVisibility(View.GONE);
-                imgRefresh.setVisibility(View.VISIBLE);
+                updateItem.setVisible(true);
             }
         }
     }
