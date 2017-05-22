@@ -8,6 +8,7 @@
         android:id="@+id/layout_user"
         android:layout_width="match_parent"
         android:foreground="?android:attr/selectableItemBackground"
+        android:background="?android:attr/selectableItemBackground"
         android:layout_height="wrap_content">
 
         <RelativeLayout
